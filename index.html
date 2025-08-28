@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Saved Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Saved Links</h1>
+
+    <input type="text" id="linkInput" placeholder="Enter website URL (e.g. https://example.com)" />
+    <button onclick="saveLink()">Save</button>
+
+    <ul id="linkList"></ul>
+
+    <script>
+        // Load links from localStorage on page load
+        window.onload = function() {
+            loadLinks();
+        };
+
+        function saveLink() {
+            const input = document.getElementById("linkInput");
+            const url = input.value.trim();
+            if (!url) return;
+
+            // Validate and normalize URL
+            const fullUrl = url.startsWith("http://") || url.startsWith("https://") ? url : "https://" + url;
+
+            let links = JSON.parse(localStorage.getItem("savedLinks")) || [];
+            links.push(fullUrl);
+            localStorage.setItem("savedLinks", JSON.stringify(links));
+            input.value = "";
+            loadLinks();
+        }
+
+        function loadLinks() {
+            const linkList = document.getElementById("linkList");
+            const links = JSON.parse(localStorage.getItem("savedLinks")) || [];
+
+            linkList.innerHTML = "";
+            links.forEach((url, index) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = url;
+                a.textContent = url;
+                a.target = "_blank";
+                li.appendChild(a);
+                linkList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
